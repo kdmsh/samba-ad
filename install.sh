@@ -38,5 +38,6 @@ fi
 # Samba設定ファイルを作成
 #sudo nano /etc/samba/smb.conf
 
+
 # 以下の内容をsmb.confファイルに追加
 
