@@ -21,9 +21,10 @@ if [ ! -x /usr/bin/tailscale ];then
 	tailscale up --ssh
 fi
 
-IP=$(/usr/bin/tailscale status | grep `hostname` | cut -d" " -f1)
+#IP=$(/usr/bin/tailscale status | grep `hostname` | cut -d" " -f1)
+IP=$(/usr/bin/tailscale ip |head -1)
 if ! grep $HOST.$REALM /etc/hosts >/dev/null 2>&1 ;then
-	echo "$IP	$HOST.$REALM	$HOST" > /etc/hosts
+	echo "$IP	$HOST.$REALM	$HOST" >> /etc/hosts
 fi
 
 # DNSの設定変更
