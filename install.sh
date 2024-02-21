@@ -7,12 +7,12 @@ set -x
 . ./config.sh
 shopt -s expand_aliases
 
-function enter_to_next(){
+function enter_to_next() {
   echo "続けるにはEnterキーを押してください..."
   read
 }
 
-function service_start(){
+function service_start() {
   service_name=$@
   # サービスのマスク状態を確認
   systemctl is-masked $service_name > /dev/null 2>&1
@@ -80,7 +80,7 @@ function service_start(){
   fi
 }
 
-function service_stop(){
+function service_stop() {
   for service_name in $@;do
     systemctl status $service_name > /dev/null 2>&1
     # サービスが起動している場合
