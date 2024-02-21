@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # 参考サイト Thank you!
 # https://zenn.dev/yuyakato/articles/1186de8f2d675d
 
