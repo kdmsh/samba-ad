@@ -36,7 +36,8 @@ systemctl disable systemd-resolved.service
 # Sambaをインストール
 PGK=""
 for P in acl attr dnsutils krb5-config krb5-user samba samba-dsdb-modules samba-vfs-modules smbclient winbind;do
-	apt -q list --installed | grep $P >/dev/null 2>&1 || PKG="$PKG $P"
+	apt list --installed $P 2>/dev/null | grep $P >/dev/null 2>&1 || PKG="$PKG $P"
+
 done
 echo "インストール対象のパッケージ"
 echo $PKG
