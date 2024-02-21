@@ -1,24 +1,15 @@
 #!/bin/sh
-HOST="dc01"
+# OS Setting
+timezone="Asia/Tokyo"
+lang="ja_JP.UTF-8"
+ipv6=true
+fqdn=dc01.ad.kodama-system.com
+
+# Samba Setting
 REALM="AD.KODAMA-SYSTEM.COM"
 domain="AD"
 server_role="dc"
 dns_backend="SAMBA_INTERNAL"
 dns_forwarder="8.8.8.8"
 admin_password="55Kodam@"
-# OS Setting
-timezone=@@@timezone@@@
-lang=@@@lang@@@
-keymap=@@@keymap@@@
-update=@@@update@@@
-ipv6=@@@ipv6@@@
-cockpit=@@@cockpit@@@
-username=@@@username@@@
-swap=@@@swap@@@
-firewall=@@@firewall@@@
-ssh=@@@ssh@@@
-fqdn=@@@fqdn@@@
-selinux=@@@selinux@@@
-snap=@@@snap@@@
-crashdump=@@@crashdump@@@
 

@@ -2,6 +2,8 @@
 # 参考サイト Thank you!
 # https://zenn.dev/yuyakato/articles/1186de8f2d675d
 
+set -x
+
 . ./config.sh
 shopt -s expand_aliases
 
@@ -14,7 +16,49 @@ if [ "$ID" != 0 ]; then
   exit $?
 fi
 
-hostnamectl set-hostname $HOST
+# パッケージのアップデート
+export DEBIAN_FRONTEND=noninteractive
+alias apt-get="apt-get -o 'Acquire::Retries=3' -o 'Acquire::https::Timeout=60' -o 'Acquire::http::Timeout=60' -o 'Acquire::ftp::Timeout=60'"
+apt-get update
+apt-get -y upgrade
+if ! type curl; then
+    apt-get -y install curl
+fi
+
+
+# hostname
+## affects log, shell-prompt
+if [ -n "$fqdn" ]; then
+  if [ ! -f /etc/hosts.org ];then
+    cp -p /etc/hosts /etc/hosts.org
+  fi
+  if [ ${fqdn%%.*} == ${fqdn} ]; then
+    sed -i -e "s/$(hostname -f)[[:space:]]$(hostname -s)/${fqdn}/" /etc/hosts
+  else
+    sed -i -e "s/$(hostname -f)[[:space:]]$(hostname -s)/${fqdn} ${fqdn%%.*}/" /etc/hosts
+  fi
+  echo ${fqdn%%.*} >/etc/hostname
+fi
+hostnamectl set-hostname ${fqdn%%.*}
+
+# timezone
+ln -fs "/usr/share/zoneinfo/$timezone" /etc/localtime
+dpkg-reconfigure -f noninteractive tzdata
+
+
+# lang
+if [ $lang != "none" ] && [ $lang != $LANG ]; then
+  pkg_mgr_install language-pack-ja language-pack-ja-base && update-locale LANG=$lang
+fi
+
+# IPv6
+if "${ipv6}"; then
+  if [ -f /etc/netplan/01-netcfg.yaml ]; then
+    # for Ubuntu 20.04
+    mv /etc/sysctl.d/60-disable-ipv6.conf /etc/sysctl.d/60-disable-ipv6.conf.bak
+    sed -i -e "s/^#//" /etc/netplan/01-netcfg.yaml
+  fi
+fi
 
 # tailscaleのインストール
 if [ ! -x /usr/bin/tailscale ];then
@@ -23,31 +67,33 @@ if [ ! -x /usr/bin/tailscale ];then
 	tailscale up --ssh
 fi
 
+exit
+
 #IP=$(/usr/bin/tailscale status | grep `hostname` | cut -d" " -f1)
-IP=$(/usr/bin/tailscale ip |head -1)
-if ! grep $HOST.$REALM /etc/hosts >/dev/null 2>&1 ;then
-	echo "$IP	$HOST.$REALM	$HOST" >> /etc/hosts
-fi
+#IP=$(/usr/bin/tailscale ip |head -1)
+#if ! grep $HOST.$REALM /etc/hosts >/dev/null 2>&1 ;then
+#	echo "$IP	$HOST.$REALM	$HOST" >> /etc/hosts
+#fi
 
 # DNSの設定変更
 systemctl disable systemd-resolved.service
 
 
 # Sambaをインストール
-PGK=""
-for P in acl attr dnsutils krb5-config krb5-user samba samba-dsdb-modules samba-vfs-modules smbclient winbind;do
-	apt list --installed $P 2>/dev/null | grep $P >/dev/null 2>&1 || PKG="$PKG $P"
+PGK="acl attr dnsutils krb5-config krb5-user samba samba-dsdb-modules samba-vfs-modules smbclient winbind"
+#for P in acl attr dnsutils krb5-config krb5-user samba samba-dsdb-modules samba-vfs-modules smbclient winbind;do
+#	apt list --installed $P 2>/dev/null | grep $P >/dev/null 2>&1 || PKG="$PKG $P"
+#done
 
-done
 echo "インストール対象のパッケージ"
-echo $PKG
-num_words=$(echo $PKG | wc -w )
-if [ $num_words -gt 1 ]; then
-  echo apt install -y $PKG
-	apt -q update
-  apt install -y $PKG
-fi
-
+#echo $PKG
+#num_words=$(echo $PKG | wc -w )
+#if [ $num_words -gt 1 ]; then
+#  echo apt install -y $PKG
+#	apt -q update
+#  apt install -y $PKG
+#fi
+apt-get -y install $PKG
 # 設定ファイルの退避
 if [ ! -f /etc/resolv.conf.org ];then
 	mv /etc/resolv.conf /etc/resolv.conf.org
