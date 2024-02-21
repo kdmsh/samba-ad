@@ -196,7 +196,16 @@ echo "インストール対象のパッケージ"
 #	apt -q update
 #  apt install -y $PKG
 #fi
-apt-get -y install $PKG
+apt-get -y install \
+  acl \
+  attr \
+  dnsutils \
+  krb5-config \
+  krb5-user \
+  samba \
+  samba-dsdb-modules \
+  samba-vfs-modules \
+  smbclient winbind
 
 echo "パッケージのインストールが完了しました"
 enter_to_next
