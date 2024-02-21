@@ -2,7 +2,9 @@
 # 参考サイト Thank you!
 # https://zenn.dev/yuyakato/articles/1186de8f2d675d
 
-. ./config.sh 
+. ./config.sh
+shopt -s expand_aliases
+
 # スクリプトを実行するユーザーがrootであることを確認
 ID=$(id -u)
 if [ "$ID" != 0 ]; then
