@@ -7,7 +7,7 @@ set -x
 . ./config.sh
 shopt -s expand_aliases
 
-function enter_to_next {
+function enter_to_next () {
   echo "続けるにはEnterキーを押してください..."
   read
 }
@@ -15,8 +15,7 @@ function enter_to_next {
 function service_start () {
   service_name=$@
   # サービスのマスク状態を確認
-  systemctl is-masked $service_name > /dev/null 2>&1
-
+  systemctl is-enabled $service_name | grep masked > /dev/null 2>&1
   # サービスがマスクされている場合
   if [ $? -eq 0 ]; then
     # サービスのマスクを解除
@@ -113,6 +112,9 @@ if [ "$ID" != 0 ]; then
   exit $?
 fi
 
+#######################################
+# OSの初期設定
+#######################################
 # パッケージのアップデート
 export DEBIAN_FRONTEND=noninteractive
 alias apt-get="apt-get -o 'Acquire::Retries=3' -o 'Acquire::https::Timeout=60' -o 'Acquire::http::Timeout=60' -o 'Acquire::ftp::Timeout=60'"
@@ -169,7 +171,9 @@ if "${tailscale}"; then
   fi
 fi
 
-enter_to_next
+#######################################
+# samba-ad-dcの設定
+#######################################
 
 #IP=$(/usr/bin/tailscale status | grep `hostname` | cut -d" " -f1)
 #IP=$(/usr/bin/tailscale ip |head -1)
