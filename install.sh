@@ -103,6 +103,12 @@ function service_stop () {
     fi
   done
 }
+
+function cp_org () {
+  if[ ! -f $1.org ];then
+    cp -p $1 $1.org
+  fi
+}
 # スクリプトを実行するユーザーがrootであることを確認
 ID=$(id -u)
 if [ "$ID" != 0 ]; then
@@ -218,15 +224,16 @@ echo "パッケージのインストールが完了しました"
 enter_to_next
 
 # 設定ファイルの退避
-if [ ! -f /etc/resolv.conf.org ];then
-	mv /etc/resolv.conf /etc/resolv.conf.org
-fi
+cp_org /etc/resolv.conf
+#if [ ! -f /etc/resolv.conf.org ];then
+#	cp -p /etc/resolv.conf /etc/resolv.conf.org
+#fi
 
 if [ ! -f /etc/samba/smb.conf.org ];then
-	mv /etc/samba/smb.conf /etc/samba/smb.conf.org
+	cp -p /etc/samba/smb.conf /etc/samba/smb.conf.org
 fi
 if [ ! -f /etc/krb5.conf.org ];then
-	mv /etc/krb5.conf /etc/krb5.conf.org
+	cp -p /etc/krb5.conf /etc/krb5.conf.org
 fi
 
 echo "次はsamba-toolの設定です"
