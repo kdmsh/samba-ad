@@ -10,6 +10,6 @@ tailscale=false
 
 # Samba Setting
 REALM="ADDC01.KODAMA-SYSTEM.COM"
-domain="ADDC01"
+domain="KODAMA-SYSTEM.COM"
 admin_password="55Kodam@"
 
