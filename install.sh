@@ -161,6 +161,9 @@ if "${ipv6}"; then
   fi
 fi
 
+# avahiのインストール
+#apt-get install avahi-daemon avahi-utils
+#service_start avahi-daemon
 
 # tailscaleのインストール
 if "${tailscale}"; then
