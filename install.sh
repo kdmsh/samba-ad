@@ -105,7 +105,7 @@ function service_stop () {
 }
 
 function cp_org () {
-  if[ ! -f $1.org ];then
+  if [ ! -f $1.org ] ;then
     cp -p $1 $1.org
   fi
 }
