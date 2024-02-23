@@ -109,6 +109,12 @@ function cp_org () {
     cp -p $1 $1.org
   fi
 }
+
+function mv_org () {
+  if [ ! -f $1.org ] ;then
+    mv $1 $1.org
+  fi
+}
 # スクリプトを実行するユーザーがrootであることを確認
 ID=$(id -u)
 if [ "$ID" != 0 ]; then
@@ -229,9 +235,10 @@ cp_org /etc/resolv.conf
 #	cp -p /etc/resolv.conf /etc/resolv.conf.org
 #fi
 
-if [ ! -f /etc/samba/smb.conf.org ];then
-	cp -p /etc/samba/smb.conf /etc/samba/smb.conf.org
-fi
+mv_org /etc/samba/smb.conf
+#if [ ! -f /etc/samba/smb.conf.org ];then
+#	mv /etc/samba/smb.conf /etc/samba/smb.conf.org
+#fi
 if [ ! -f /etc/krb5.conf.org ];then
 	cp -p /etc/krb5.conf /etc/krb5.conf.org
 fi
