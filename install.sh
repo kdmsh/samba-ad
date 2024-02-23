@@ -193,7 +193,7 @@ fi
 # DNSの設定変更
 systemctl disable systemd-resolved.service
 
-enter_to_next
+
 
 # Sambaをインストール
 PGK="acl attr dnsutils krb5-config krb5-user samba samba-dsdb-modules samba-vfs-modules smbclient winbind"
@@ -221,7 +221,7 @@ apt-get -y install \
   smbclient winbind
 
 echo "パッケージのインストールが完了しました"
-enter_to_next
+
 
 # 設定ファイルの退避
 cp_org /etc/resolv.conf
@@ -250,7 +250,7 @@ samba-tool domain provision \
   --adminpass="$admin_password"
 
 cp /var/lib/samba/private/krb5.conf /etc/
-
+enter_to_next
 # 不要なサービスの無効化
 #systemctl stop smbd.service nmbd.service winbind.service
 service_stop smbd.service nmbd.service winbind.service
