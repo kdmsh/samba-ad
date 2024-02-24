@@ -255,7 +255,9 @@ samba-tool domain provision \
   --option="dns forwarder=8.8.8.8" \
   --option="dns forwarder=8.8.4.4" \
   --adminpass="$admin_password"
-
+if [ $? -ne 0 ];then
+  exit 1
+fi
 cp /var/lib/samba/private/krb5.conf /etc/
 enter_to_next
 # 不要なサービスの無効化
