@@ -9,7 +9,7 @@ fqdn=dc01.ad.kodama-system.com
 tailscale=false
 
 # Samba Setting
-REALM="DC01.AD.KODAMA-SYSTEM.COM"
-domain="AD.KODAMA-SYSTEM.COM"
+REALM="AD.KODAMA-SYSTEM.COM"
+domain="AD"
 admin_password="55Kodam@"
 
