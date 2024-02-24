@@ -4,6 +4,8 @@
 
 ## インストール方法
 
-git clone [https://github.com/kdmsh/samba-ad](https://github.com/kdmsh/samba-ad)  
+```bash
+git clone https://github.com/kdmsh/samba-ad  
 cd samba-ad  
-./install.sh  
+./install.sh
+```
